@@ -6,6 +6,7 @@ import com.stocktrader.models.Stock;
 import com.stocktrader.models.User;
 import java.util.Map;
 import java.util.Scanner;
+import com.stocktrader.engine.PortfolioTracker;
 
 public class ConsoleUI {
     
@@ -50,7 +51,7 @@ public class ConsoleUI {
     engine.loginUser("U001", name);
     }
 
-     // Replace your mainMenu() method with this:
+     
 private void mainMenu() {
     boolean running = true;
     while (running) {
@@ -63,22 +64,26 @@ private void mainMenu() {
         System.out.println("  6. View transaction history");
         System.out.println("  7. Simulate market update");
         System.out.println("  8. Save portfolio");
-        System.out.println("  9. Exit");
+        System.out.println("  9. Performance report");
+        System.out.println(" 10. Exit");
         System.out.println("===================================");
         System.out.print("Choose option: ");
 
         String input = scanner.nextLine().trim();
         switch (input) {
-            case "1" -> engine.getMarket().displayAllStocks();
-            case "2" -> searchStock();
-            case "3" -> buyFlow();
-            case "4" -> sellFlow();
-            case "5" -> showPortfolio();
-            case "6" -> engine.getCurrentUser().printTransactionHistory();
-            case "7" -> engine.runMarketTick();
-            case "8" -> engine.saveGame();
-            case "9" -> running = false;
-            default  -> System.out.println("Invalid option. Enter 1-9.");
+            case "1"  -> engine.getMarket().displayAllStocks();
+            case "2"  -> searchStock();
+            case "3"  -> buyFlow();
+            case "4"  -> sellFlow();
+            case "5"  -> showPortfolio();
+            case "6"  -> engine.getCurrentUser().printTransactionHistory();
+            case "7"  -> engine.runMarketTick();
+            case "8"  -> engine.saveGame();
+            case "9"  -> new PortfolioTracker(
+                            engine.getCurrentUser(),
+                            engine.getMarket()).printReport();
+            case "10" -> running = false;
+            default   -> System.out.println("Invalid option. Enter 1-10.");
         }
     }
 }
