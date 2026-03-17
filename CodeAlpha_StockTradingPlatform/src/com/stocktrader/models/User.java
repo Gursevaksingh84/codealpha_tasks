@@ -24,6 +24,10 @@ public class User {
     public String getUserId()   { return userId; }
     public String getName()     { return name; }
     public double getBalance()  { return balance; }
+    // Used only by DataManager when loading saved data
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
     public Map<String, Integer> getPortfolio() { return portfolio; }
     public List<Transaction> getTransactionHistory() { return transactionHistory; }
 

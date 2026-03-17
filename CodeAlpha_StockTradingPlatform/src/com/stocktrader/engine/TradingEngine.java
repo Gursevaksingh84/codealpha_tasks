@@ -1,5 +1,6 @@
 package com.stocktrader.engine;
 
+import com.stocktrader.data.DataManager;
 import com.stocktrader.models.Market;
 import com.stocktrader.models.Stock;
 import com.stocktrader.models.User;
@@ -18,6 +19,22 @@ public class TradingEngine {
         System.out.println("Welcome, " + name + "! Balance: Rs" +
             String.format("%.2f", currentUser.getBalance()));
     }
+
+    public void saveGame() {
+    if (!isLoggedIn()) return;
+    DataManager.savePortfolio(currentUser);
+}
+
+public void loadGame() {
+    User loaded = DataManager.loadPortfolio(market);
+    if (loaded != null) {
+        this.currentUser = loaded;
+    }
+}
+
+public boolean hasSavedGame() {
+    return DataManager.saveExists();
+}
 
     public User getCurrentUser() { return currentUser; }
     public Market getMarket()    { return market; }

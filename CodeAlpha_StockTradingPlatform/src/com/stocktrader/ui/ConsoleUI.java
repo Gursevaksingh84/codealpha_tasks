@@ -4,7 +4,6 @@ import com.stocktrader.engine.TradingEngine;
 import com.stocktrader.models.Market;
 import com.stocktrader.models.Stock;
 import com.stocktrader.models.User;
-
 import java.util.Map;
 import java.util.Scanner;
 
@@ -33,45 +32,56 @@ public class ConsoleUI {
     }
 
     private void loginPrompt() {
-        System.out.println("\nEnter your name to start trading:");
-        System.out.print("> ");
-        String name = scanner.nextLine().trim();
-        if (name.isEmpty()) name = "Trader";
-        engine.loginUser("U001", name);
-    }
-
-     private void mainMenu() {
-        boolean running = true;
-
-        while (running) {
-            System.out.println("\n============ MAIN MENU ============");
-            System.out.println("  1. View market");
-            System.out.println("  2. Search stock");
-            System.out.println("  3. Buy shares");
-            System.out.println("  4. Sell shares");
-            System.out.println("  5. View my portfolio");
-            System.out.println("  6. View transaction history");
-            System.out.println("  7. Simulate market update");
-            System.out.println("  8. Exit");
-            System.out.println("===================================");
-            System.out.print("Choose option: ");
-
-            String input = scanner.nextLine().trim();
-
-            switch (input) {
-                case "1" -> engine.getMarket().displayAllStocks();
-                case "2" -> searchStock();
-                case "3" -> buyFlow();
-                case "4" -> sellFlow();
-                case "5" -> showPortfolio();
-                case "6" -> engine.getCurrentUser().printTransactionHistory();
-                case "7" -> engine.runMarketTick();
-                case "8" -> running = false;
-                default  -> System.out.println("Invalid option. Enter 1-8.");
-            }
+       if (engine.hasSavedGame()) {
+        System.out.print("Saved portfolio found! Load it? (y/n): ");
+        String choice = scanner.nextLine().trim();
+        if (choice.equalsIgnoreCase("y")) {
+            System.out.print("Enter your name: ");
+            String name = scanner.nextLine().trim();
+            engine.loginUser("U001", name);
+            engine.loadGame();
+            return;
         }
     }
+    System.out.println("Enter your name to start trading:");
+    System.out.print("> ");
+    String name = scanner.nextLine().trim();
+    if (name.isEmpty()) name = "Trader";
+    engine.loginUser("U001", name);
+    }
 
+     // Replace your mainMenu() method with this:
+private void mainMenu() {
+    boolean running = true;
+    while (running) {
+        System.out.println("\n============ MAIN MENU ============");
+        System.out.println("  1. View market");
+        System.out.println("  2. Search stock");
+        System.out.println("  3. Buy shares");
+        System.out.println("  4. Sell shares");
+        System.out.println("  5. View my portfolio");
+        System.out.println("  6. View transaction history");
+        System.out.println("  7. Simulate market update");
+        System.out.println("  8. Save portfolio");
+        System.out.println("  9. Exit");
+        System.out.println("===================================");
+        System.out.print("Choose option: ");
+
+        String input = scanner.nextLine().trim();
+        switch (input) {
+            case "1" -> engine.getMarket().displayAllStocks();
+            case "2" -> searchStock();
+            case "3" -> buyFlow();
+            case "4" -> sellFlow();
+            case "5" -> showPortfolio();
+            case "6" -> engine.getCurrentUser().printTransactionHistory();
+            case "7" -> engine.runMarketTick();
+            case "8" -> engine.saveGame();
+            case "9" -> running = false;
+            default  -> System.out.println("Invalid option. Enter 1-9.");
+        }
+    }
+}
     private void searchStock() {
         System.out.print("Enter stock symbol (e.g. TCS): ");
         String symbol = scanner.nextLine().trim().toUpperCase();
